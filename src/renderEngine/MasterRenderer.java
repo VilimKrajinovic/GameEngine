@@ -50,6 +50,7 @@ public class MasterRenderer {
         renderer.render(entities);
         shader.stop();
 
+//        TERRAIN
         terrainShader.start();
         terrainShader.loadLight(sun);
         terrainShader.loadViewMatrix(camera);
@@ -61,7 +62,7 @@ public class MasterRenderer {
         entities.clear();
     }
 
-    public void prepare() {
+    private void prepare() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); //clears the previous color and the depth buffer
         GL11.glClearColor(0.5f, 0, 0.5f, 1);

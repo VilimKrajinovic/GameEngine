@@ -5,33 +5,52 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
 
+    private static final float SPEED_OF_CAMERA_MOVEMENT = 0.2f;
     private Vector3f position = new Vector3f(0, 0, 0);
     private float pitch;
     private float yaw;
     private float roll;
 
-    public Camera() {
+    public void setPosition(Vector3f position) {
+        this.position = position;
+    }
 
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
+
+    public void setRoll(float roll) {
+        this.roll = roll;
+    }
+
+    public Camera() {
     }
 
     public void move() {
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            position.z -= 0.02f;
+            position.z -= SPEED_OF_CAMERA_MOVEMENT;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            position.x += 0.02f;
+            position.x += SPEED_OF_CAMERA_MOVEMENT;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-            position.z += 0.02f;
+            position.z += SPEED_OF_CAMERA_MOVEMENT;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            position.x -= 0.02f;
+            position.x -= SPEED_OF_CAMERA_MOVEMENT;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-            position.y -= 0.02f;
+            position.y -= SPEED_OF_CAMERA_MOVEMENT;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-            position.y += 0.02f;
+            position.y += SPEED_OF_CAMERA_MOVEMENT;
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+            roll += SPEED_OF_CAMERA_MOVEMENT;
         }
     }
 

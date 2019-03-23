@@ -30,8 +30,8 @@ public class MainGameLoop {
         Entity entity = new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 0.5f);
         Light light = new Light(new Vector3f(0, 0, -15.0f), new Vector3f(1, 1, 1));
 
-        Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("white")));
-//        Terrain terrain2 = new Terrain(1,0,loader, new ModelTexture(loader.loadTexture("wood")));
+        Terrain terrainOne = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrainTwo = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("wood")));
 
         Camera camera = new Camera();
 
@@ -42,8 +42,8 @@ public class MainGameLoop {
             camera.move();
 
             //render
-            renderer.processTerrain(terrain);
-//            renderer.processTerrain(terrain2);
+            renderer.processTerrain(terrainOne);
+            renderer.processTerrain(terrainTwo);
 
             renderer.processEntity(entity);
             renderer.render(light, camera);
