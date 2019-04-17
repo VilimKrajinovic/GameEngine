@@ -4,6 +4,7 @@ import com.sun.webkit.dom.EntityImpl;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.Model;
 import models.TexturedModel;
 import org.lwjgl.opengl.Display;
@@ -54,7 +55,7 @@ public class MainGameLoop {
         grass.getTexture().setUseFakeLighting(true);
         fern.getTexture().setHasTransparency(true);
 
-        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 0.5f);
+        Entity dragon = new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 0.5f);
         Light light = new Light(new Vector3f(2000, 2000, -15.0f), new Vector3f(1, 1, 1));
 
         List<Entity> entities = new ArrayList<>();
@@ -72,11 +73,18 @@ public class MainGameLoop {
 
         Camera camera = new Camera();
 
+        Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
+        TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
+        Player player = new Player(dragonTexturedModel, new Vector3f(0,0,-50), 0,0,0,1);
+
         MasterRenderer renderer = new MasterRenderer();
         while (!Display.isCloseRequested()) {
             //game logic
-            entity.increaseRotation(0, 0.1f, 0f);
+            dragon.increaseRotation(0, 0.1f, 0f);
             camera.move();
+
+            player.move();
+            renderer.processEntity(player);
 
             //render
             renderer.processTerrain(terrainOne);
@@ -88,7 +96,7 @@ public class MainGameLoop {
                 renderer.processEntity(grassEntity);
             }
 
-            renderer.processEntity(entity);
+            renderer.processEntity(dragon);
             renderer.render(light, camera);
 
             DisplayManager.updateDisplay();
