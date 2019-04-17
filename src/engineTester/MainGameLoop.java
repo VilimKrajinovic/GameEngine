@@ -7,6 +7,8 @@ import entities.Light;
 import entities.Player;
 import models.Model;
 import models.TexturedModel;
+import objConverter.ModelData;
+import objConverter.ObjFileLoader;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
@@ -43,7 +45,8 @@ public class MainGameLoop {
         //
 
 
-        Model model = ObjLoader.loadObjModel("dragon", loader);
+        ModelData dragonData = ObjFileLoader.loadOBJ("dragon");
+        Model model = loader.loadToVAO(dragonData.getVertices(), dragonData.getTextureCoords(), dragonData.getNormals(), dragonData.getIndices());
         TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("white")));
         ModelTexture texture = staticModel.getTexture();
         texture.setShineDamper(10);
