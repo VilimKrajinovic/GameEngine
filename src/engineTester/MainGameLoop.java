@@ -31,7 +31,6 @@ public class MainGameLoop {
 
         Loader loader = new Loader();
 
-
         // TERRAIN TEXTURE
 
         TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
@@ -43,7 +42,6 @@ public class MainGameLoop {
         TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
         //
-
 
         ModelData dragonData = ObjFileLoader.loadOBJ("dragon");
         Model model = loader.loadToVAO(dragonData.getVertices(), dragonData.getTextureCoords(), dragonData.getNormals(), dragonData.getIndices());
@@ -77,7 +75,7 @@ public class MainGameLoop {
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
-        Player player = new Player(dragonTexturedModel, new Vector3f(0,0,-50), 0,0,0,1);
+        Player player = new Player(dragonTexturedModel, new Vector3f(0,10,-50), 0,0,0,0.3f);
 
         Camera camera = new Camera(player);
         MasterRenderer renderer = new MasterRenderer();
