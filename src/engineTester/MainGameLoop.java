@@ -75,7 +75,7 @@ public class MainGameLoop {
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
-        Player player = new Player(dragonTexturedModel, new Vector3f(0,10,-50), 0,0,0,0.3f);
+        Player player = new Player(dragonTexturedModel, new Vector3f(0,0,-50), 0,0,0,1);
 
         Camera camera = new Camera(player);
         MasterRenderer renderer = new MasterRenderer();
