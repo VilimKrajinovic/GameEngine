@@ -74,12 +74,12 @@ public class MainGameLoop {
         Terrain terrainThree = new Terrain(-1, -1, loader, texturePack, blendMap);
         Terrain terrainFour = new Terrain(0, -1, loader, texturePack, blendMap);
 
-        Camera camera = new Camera();
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
         Player player = new Player(dragonTexturedModel, new Vector3f(0,0,-50), 0,0,0,1);
 
+        Camera camera = new Camera(player);
         MasterRenderer renderer = new MasterRenderer();
         while (!Display.isCloseRequested()) {
             //game logic
