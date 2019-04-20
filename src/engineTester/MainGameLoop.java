@@ -67,10 +67,10 @@ public class MainGameLoop {
             entities.add(new Entity(fern, new Vector3f(random.nextFloat()*800 -400, 0, -random.nextFloat() * 600), 0,0,0,0.5f));
         }
 
-        Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap);
-        Terrain terrainTwo = new Terrain(1, 0, loader, texturePack, blendMap);
-        Terrain terrainThree = new Terrain(-1, -1, loader, texturePack, blendMap);
-        Terrain terrainFour = new Terrain(0, -1, loader, texturePack, blendMap);
+        Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap,"zagreb_heightmap");
+        Terrain terrainTwo = new Terrain(1, 0, loader, texturePack, blendMap,"zagreb_heightmap");
+        Terrain terrainThree = new Terrain(-1, -1, loader, texturePack, blendMap,"zagreb_heightmap");
+        Terrain terrainFour = new Terrain(0, -1, loader, texturePack, blendMap,"zagreb_heightmap");
 
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
