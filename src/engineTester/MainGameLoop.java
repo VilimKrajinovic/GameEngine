@@ -1,6 +1,5 @@
 package engineTester;
 
-import com.sun.webkit.dom.EntityImpl;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -67,10 +66,10 @@ public class MainGameLoop {
             entities.add(new Entity(fern, new Vector3f(random.nextFloat()*800 -400, 0, -random.nextFloat() * 600), 0,0,0,0.5f));
         }
 
-        Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap,"zagreb_heightmap");
-        Terrain terrainTwo = new Terrain(1, 0, loader, texturePack, blendMap,"zagreb_heightmap");
-        Terrain terrainThree = new Terrain(-1, -1, loader, texturePack, blendMap,"zagreb_heightmap");
-        Terrain terrainFour = new Terrain(0, -1, loader, texturePack, blendMap,"zagreb_heightmap");
+        Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap,"heightmap");
+        Terrain terrainTwo = new Terrain(-1, 0, loader, texturePack, blendMap,"heightmap");
+        Terrain terrainThree = new Terrain(-1, -1, loader, texturePack, blendMap,"heightmap");
+        Terrain terrainFour = new Terrain(0, -1, loader, texturePack, blendMap,"heightmap");
 
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
@@ -84,7 +83,7 @@ public class MainGameLoop {
             dragon.increaseRotation(0, 0.1f, 0f);
             camera.move();
 
-            player.move();
+            player.move(terrainOne);
             renderer.processEntity(player);
 
             //render
