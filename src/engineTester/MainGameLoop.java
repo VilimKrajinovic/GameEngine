@@ -61,20 +61,38 @@ public class MainGameLoop {
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();
 
-        for (int i = 0; i<500; i++){
-            entities.add(new Entity(grass, new Vector3f(random.nextFloat()*800 -400, 1.2f, -random.nextFloat() * 600), 180,0,0,1));
-            entities.add(new Entity(fern, new Vector3f(random.nextFloat()*800 -400, 0, -random.nextFloat() * 600), 0,0,0,0.5f));
-        }
+        Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap, "heightmap");
+        Terrain terrainTwo = new Terrain(1, 0, loader, texturePack, blendMap, "heightmap");
+        Terrain terrainThree = new Terrain(1, 1, loader, texturePack, blendMap, "heightmap");
+        Terrain terrainFour = new Terrain(0, 1, loader, texturePack, blendMap, "heightmap");
 
-        Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap,"heightmap");
-        Terrain terrainTwo = new Terrain(-1, 0, loader, texturePack, blendMap,"heightmap");
-        Terrain terrainThree = new Terrain(-1, -1, loader, texturePack, blendMap,"heightmap");
-        Terrain terrainFour = new Terrain(0, -1, loader, texturePack, blendMap,"heightmap");
+        Terrain[][] terrains = new Terrain[2][2];
+        terrains[0][0] = terrainOne;
+        terrains[1][0] = terrainTwo;
+        terrains[1][1] = terrainThree;
+        terrains[0][1] = terrainFour;
+
+        for (int i = 0; i < 10000; i++) {
+            if(i % 2 == 0){
+                float x = random.nextFloat() * 1600;
+                float z = random.nextFloat() * 1600;
+                Terrain currentTerrain = getTerrainAtWorldCoordinates(x,z, terrains);
+                float y = currentTerrain.getHeightOfTerrain(x,z);
+                entities.add(new Entity(grass, new Vector3f(x,y,z), 180, 0, 0, 1));
+            }
+            if(i % 5 == 0){
+                float x = random.nextFloat() * 1600;
+                float z = random.nextFloat() * 1600;
+                Terrain currentTerrain = getTerrainAtWorldCoordinates(x,z, terrains);
+                float y = currentTerrain.getHeightOfTerrain(x,z);
+                entities.add(new Entity(fern, new Vector3f(x,y,z), 0, 0, 0, 0.5f));
+            }
+        }
 
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
-        Player player = new Player(dragonTexturedModel, new Vector3f(0,0,-50), 0,0,0,1);
+        Player player = new Player(dragonTexturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
 
         Camera camera = new Camera(player);
         MasterRenderer renderer = new MasterRenderer();
@@ -83,7 +101,9 @@ public class MainGameLoop {
             dragon.increaseRotation(0, 0.1f, 0f);
             camera.move();
 
-            player.move(terrainOne);
+            System.out.println("x: " + player.getPosition().x + "  z: " + player.getPosition().z);
+            player.move(getTerrainAtWorldCoordinates(player.getPosition().x, player.getPosition().z, terrains));
+
             renderer.processEntity(player);
 
             //render
@@ -105,5 +125,15 @@ public class MainGameLoop {
         loader.cleanUp();
         DisplayManager.closeDisplay();
 
+    }
+
+    private static Terrain getTerrainAtWorldCoordinates(float worldX, float worldZ, Terrain[][] terrains) {
+        if(worldX > 1600 || worldZ>1600)
+        {
+            return null;
+        }
+        int x = (int) (worldX / Terrain.SIZE);
+        int z = (int) (worldZ / Terrain.SIZE);
+        return terrains[x][z];
     }
 }
