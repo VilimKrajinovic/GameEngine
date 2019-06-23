@@ -6,6 +6,9 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import terrain.Terrain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player extends Entity {
 
     private static final float RUN_SPEED = 200;
@@ -20,6 +23,7 @@ public class Player extends Entity {
     private float upwardsSpeed = 0;
     private float currentSpeed = 0;
     private float currentTurnSpeed = 0;
+    private List<Entity> inventory = new ArrayList<>();
 
     public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
         super(model, position, rotX, rotY, rotZ, scale);
@@ -62,7 +66,15 @@ public class Player extends Entity {
         if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !isInAir){
             jump();
         }
+    }
 
+    public void pickUp(Entity entity){
+        System.out.println("Currently there are " + inventory.size() + " items in inventory");
+        if(!inventory.contains(entity)){
+            System.out.println("Picked up entity");
+            inventory.add(entity);
+            entity.setShouldRender(false);
+        }
     }
 
     private void jump() {

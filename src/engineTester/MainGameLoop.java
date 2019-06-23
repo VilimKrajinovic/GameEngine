@@ -72,23 +72,7 @@ public class MainGameLoop {
         terrains[1][1] = terrainThree;
         terrains[0][1] = terrainFour;
 
-        for (int i = 0; i < 10000; i++) {
-            if(i % 2 == 0){
-                float x = random.nextFloat() * 1600;
-                float z = random.nextFloat() * 1600;
-                Terrain currentTerrain = getTerrainAtWorldCoordinates(x,z, terrains);
-                float y = currentTerrain.getHeightOfTerrain(x,z);
-                entities.add(new Entity(grass, new Vector3f(x,y,z), 180, 0, 0, 1));
-            }
-            if(i % 5 == 0){
-                float x = random.nextFloat() * 1600;
-                float z = random.nextFloat() * 1600;
-                Terrain currentTerrain = getTerrainAtWorldCoordinates(x,z, terrains);
-                float y = currentTerrain.getHeightOfTerrain(x,z);
-                entities.add(new Entity(fern, new Vector3f(x,y,z), 0, 0, 0, 0.5f));
-            }
-        }
-
+        populateWorldWithGrassAndFerns(grass, fern, entities, random, terrains);
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
@@ -101,12 +85,18 @@ public class MainGameLoop {
             dragon.increaseRotation(0, 0.1f, 0f);
             camera.move();
 
-            System.out.println("x: " + player.getPosition().x + "  z: " + player.getPosition().z);
+//            System.out.println("x: " + player.getPosition().x + "  z: " + player.getPosition().z);
             player.move(getTerrainAtWorldCoordinates(player.getPosition().x, player.getPosition().z, terrains));
 
-            renderer.processEntity(player);
+            if (checkCollision(player, dragon)){
+                System.out.println("Collision between player and dragon!!!");
+                player.pickUp(dragon);
+
+            }
 
             //render
+            renderer.processEntity(player);
+
             renderer.processTerrain(terrainOne);
             renderer.processTerrain(terrainTwo);
             renderer.processTerrain(terrainThree);
@@ -127,9 +117,41 @@ public class MainGameLoop {
 
     }
 
+    private static void populateWorldWithGrassAndFerns(TexturedModel grass, TexturedModel fern, List<Entity> entities, Random random, Terrain[][] terrains) {
+        for (int i = 0; i < 10000; i++) {
+            if (i % 2 == 0) {
+                float x = random.nextFloat() * 1600;
+                float z = random.nextFloat() * 1600;
+                Terrain currentTerrain = getTerrainAtWorldCoordinates(x, z, terrains);
+                float y = currentTerrain.getHeightOfTerrain(x, z);
+                entities.add(new Entity(grass, new Vector3f(x, y, z), 180, 0, 0, 1));
+            }
+            if (i % 5 == 0) {
+                float x = random.nextFloat() * 1600;
+                float z = random.nextFloat() * 1600;
+                Terrain currentTerrain = getTerrainAtWorldCoordinates(x, z, terrains);
+                float y = currentTerrain.getHeightOfTerrain(x, z);
+                entities.add(new Entity(fern, new Vector3f(x, y, z), 0, 0, 0, 0.5f));
+            }
+        }
+    }
+
+    private static boolean checkCollision(Player player, Entity entity) {
+        if (checkXAxis(player, entity))
+            return checkZAxis(player, entity);
+        return false;
+    }
+
+    private static boolean checkZAxis(Player player, Entity entity) {
+        return player.getPosition().z >= entity.getPosition().z - 5 && player.getPosition().z <= entity.getPosition().z + 5;
+    }
+
+    private static boolean checkXAxis(Player player, Entity entity) {
+        return player.getPosition().x >= entity.getPosition().x - 5 && player.getPosition().x <= entity.getPosition().x + 5;
+    }
+
     private static Terrain getTerrainAtWorldCoordinates(float worldX, float worldZ, Terrain[][] terrains) {
-        if(worldX > 1600 || worldZ>1600)
-        {
+        if (worldX > 1600 || worldZ > 1600) {
             return null;
         }
         int x = (int) (worldX / Terrain.SIZE);
