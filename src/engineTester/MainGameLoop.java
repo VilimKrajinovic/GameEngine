@@ -66,6 +66,12 @@ public class MainGameLoop {
         Terrain terrainThree = new Terrain(1, 1, loader, texturePack, blendMap, "heightmap");
         Terrain terrainFour = new Terrain(0, 1, loader, texturePack, blendMap, "heightmap");
 
+        TexturedModel one = new TexturedModel(ObjLoader.loadObjModel("one", loader), new ModelTexture(loader.loadTexture("white")));
+        Entity numberOne = new Entity(one, new Vector3f(0,0,-10), 0,0,0,3);
+
+        TexturedModel two = new TexturedModel(ObjLoader.loadObjModel("two", loader), new ModelTexture(loader.loadTexture("white")));
+        Entity numberTwo = new Entity(two, new Vector3f(0,0,-10), 0,0,0,3);
+
         Terrain[][] terrains = new Terrain[2][2];
         terrains[0][0] = terrainOne;
         terrains[1][0] = terrainTwo;
