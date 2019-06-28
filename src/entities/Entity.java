@@ -8,6 +8,7 @@ public class Entity {
     private Vector3f position;
     private float rotX, rotY, rotZ;
     private float scale;
+    private boolean shouldRender = true;
 
     public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
         this.model = model;
@@ -30,7 +31,13 @@ public class Entity {
         this.rotZ += dz;
     }
 
+    public boolean isShouldRender() {
+        return shouldRender;
+    }
 
+    public void setShouldRender(boolean shouldRender) {
+        this.shouldRender = shouldRender;
+    }
     public TexturedModel getModel() {
         return model;
     }

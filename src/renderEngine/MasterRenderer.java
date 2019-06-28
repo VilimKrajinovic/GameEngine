@@ -35,19 +35,19 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private List<Terrain> terrains = new ArrayList<>();
 
-    public MasterRenderer(){
+    public MasterRenderer() {
         enableCulling();
         createProjectionMatrix();
-        renderer = new EntityRenderer(shader,  projectionMatrix);
+        renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
     }
 
-    public static void enableCulling(){
+    public static void enableCulling() {
         GL11.glEnable(GL11.GL_CULL_FACE); //disable rendering things facing away from the camera
         GL11.glCullFace(GL11.GL_BACK);
     }
 
-    public static void disableCulling(){
+    public static void disableCulling() {
         GL11.glDisable(GL11.GL_CULL_FACE);
 
     }
@@ -81,19 +81,21 @@ public class MasterRenderer {
         GL11.glClearColor(RED, GREEN, BLUE, 1);
     }
 
-    public void processTerrain(Terrain terrain){
+    public void processTerrain(Terrain terrain) {
         terrains.add(terrain);
     }
 
     public void processEntity(Entity entity) {
-        TexturedModel entityModel = entity.getModel();
-        List<Entity> batch = entities.get(entityModel);
-        if (batch != null) {
-            batch.add(entity);
-        } else {
-            List<Entity> newBatch = new ArrayList<>();
-            newBatch.add(entity);
-            entities.put(entityModel, newBatch);
+        if (entity.isShouldRender()) {
+            TexturedModel entityModel = entity.getModel();
+            List<Entity> batch = entities.get(entityModel);
+            if (batch != null) {
+                batch.add(entity);
+            } else {
+                List<Entity> newBatch = new ArrayList<>();
+                newBatch.add(entity);
+                entities.put(entityModel, newBatch);
+            }
         }
     }
 
