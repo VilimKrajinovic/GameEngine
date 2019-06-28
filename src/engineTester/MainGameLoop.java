@@ -58,8 +58,11 @@ public class MainGameLoop {
         Entity dragon = new Entity(staticModel, new Vector3f(0, 0, -20), 0, 0, 0, 0.5f);
         Light light = new Light(new Vector3f(2000, 2000, -15.0f), new Vector3f(1, 1, 1));
 
-        List<Entity> entities = new ArrayList<>();
-        Random random = new Random();
+        TexturedModel one = new TexturedModel(ObjLoader.loadObjModel("one", loader), new ModelTexture(loader.loadTexture("white")));
+        Entity numberOne = new Entity(one, new Vector3f(0,0,-10), 0,0,0,3);
+
+        TexturedModel two = new TexturedModel(ObjLoader.loadObjModel("two", loader), new ModelTexture(loader.loadTexture("white")));
+        Entity numberTwo = new Entity(two, new Vector3f(0,0,-10), 0,0,0,3);
 
         Terrain terrainOne = new Terrain(0, 0, loader, texturePack, blendMap, "heightmap");
         Terrain terrainTwo = new Terrain(1, 0, loader, texturePack, blendMap, "heightmap");
@@ -71,6 +74,9 @@ public class MainGameLoop {
         terrains[1][0] = terrainTwo;
         terrains[1][1] = terrainThree;
         terrains[0][1] = terrainFour;
+
+        Random random = new Random();
+        List<Entity> entities = new ArrayList<>();
 
         for (int i = 0; i < 10000; i++) {
             if(i % 2 == 0){
@@ -90,6 +96,7 @@ public class MainGameLoop {
         }
 
 
+
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
         Player player = new Player(dragonTexturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
@@ -101,7 +108,7 @@ public class MainGameLoop {
             dragon.increaseRotation(0, 0.1f, 0f);
             camera.move();
 
-            System.out.println("x: " + player.getPosition().x + "  z: " + player.getPosition().z);
+//            System.out.println("x: " + player.getPosition().x + "  z: " + player.getPosition().z);
             player.move(getTerrainAtWorldCoordinates(player.getPosition().x, player.getPosition().z, terrains));
 
             renderer.processEntity(player);
@@ -112,10 +119,12 @@ public class MainGameLoop {
             renderer.processTerrain(terrainThree);
             renderer.processTerrain(terrainFour);
 
-            for (Entity grassEntity : entities) {
-                renderer.processEntity(grassEntity);
+            for (Entity entity : entities) {
+                renderer.processEntity(entity);
             }
 
+            renderer.processEntity(numberOne);
+            renderer.processEntity(numberTwo);
             renderer.processEntity(dragon);
             renderer.render(light, camera);
 
