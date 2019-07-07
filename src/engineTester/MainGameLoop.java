@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.Random;
 
 public class MainGameLoop {
+
+    private static boolean pickedUpOne = false;
+    private static boolean pickedUpTwo = false;
+
     public static void main(String[] args) {
 
         DisplayManager.createDisplay();
@@ -66,11 +70,6 @@ public class MainGameLoop {
         Terrain terrainThree = new Terrain(1, 1, loader, texturePack, blendMap, "heightmap");
         Terrain terrainFour = new Terrain(0, 1, loader, texturePack, blendMap, "heightmap");
 
-        TexturedModel one = new TexturedModel(ObjLoader.loadObjModel("one", loader), new ModelTexture(loader.loadTexture("white")));
-        Entity numberOne = new Entity(one, new Vector3f(0,0,-10), 0,0,0,3);
-
-        TexturedModel two = new TexturedModel(ObjLoader.loadObjModel("two", loader), new ModelTexture(loader.loadTexture("white")));
-        Entity numberTwo = new Entity(two, new Vector3f(0,0,-10), 0,0,0,3);
 
         Terrain[][] terrains = new Terrain[2][2];
         terrains[0][0] = terrainOne;
@@ -80,6 +79,17 @@ public class MainGameLoop {
 
         populateWorldWithGrassAndFerns(grass, fern, entities, random, terrains);
 
+        float x = random.nextFloat() * 800;
+        float z = random.nextFloat() * 800;
+
+        TexturedModel one = new TexturedModel(ObjLoader.loadObjModel("one", loader), new ModelTexture(loader.loadTexture("white")));
+        Entity numberOne = new Entity(one, new Vector3f(x, getTerrainAtWorldCoordinates(x, z, terrains).getHeightOfTerrain(x, z), z), 0, 0, 0, 3);
+
+        x = random.nextFloat() * 800;
+        z = random.nextFloat() * 800;
+
+        TexturedModel two = new TexturedModel(ObjLoader.loadObjModel("two", loader), new ModelTexture(loader.loadTexture("white")));
+        Entity numberTwo = new Entity(two, new Vector3f(x, getTerrainAtWorldCoordinates(x, z, terrains).getHeightOfTerrain(x, z), z), 0, 0, 0, 3);
 
         Model dragonModel = ObjLoader.loadObjModel("dragon", loader);
         TexturedModel dragonTexturedModel = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("white")));
@@ -95,11 +105,14 @@ public class MainGameLoop {
 //            System.out.println("x: " + player.getPosition().x + "  z: " + player.getPosition().z);
             player.move(getTerrainAtWorldCoordinates(player.getPosition().x, player.getPosition().z, terrains));
 
-            if (checkCollision(player, dragon)){
+            if (checkCollision(player, dragon)) {
                 System.out.println("Collision between player and dragon!!!");
                 player.pickUp(dragon);
 
             }
+
+
+            checkNumbers(player, numberOne, numberTwo);
 
             //render
             renderer.processEntity(player);
@@ -143,6 +156,21 @@ public class MainGameLoop {
                 entities.add(new Entity(fern, new Vector3f(x, y, z), 0, 0, 0, 0.5f));
             }
         }
+    }
+
+    private static void checkNumbers(Player player, Entity one, Entity two) {
+        if (!pickedUpOne) {
+            if (checkCollision(player, one)) {
+                player.pickUp(one);
+                pickedUpOne = true;
+            }
+        } else if (!pickedUpTwo) {
+            if (checkCollision(player, two)) {
+                player.pickUp(two);
+                pickedUpTwo = true;
+            }
+        }
+
     }
 
     private static boolean checkCollision(Player player, Entity entity) {
